@@ -41,6 +41,8 @@ function borrarDelCarro(idProducto){
 }
 
 function calcularTotal(listadoCarro){
+    // Se reinicia la variable
+    total = 0;
     for(const producto of listadoCarro){
         total+= producto.precio;
     }
@@ -73,6 +75,14 @@ else {
     }
 }
 
+// Simulacion del proceso
+
+// Se agregan dos productos al carro, se calcula el total, y se eliminan algunos productos
+agregarAlCarro({id:60, nombre:"Pantalones", marca:"Adidas", precio: 8000});
+agregarAlCarro({ id:59, nombre:"Pantalones", marca:"Nike", precio:9500});
+
+calcularTotal(carrito);
+borrarDelCarro(60);
+calcularTotal(carrito);
 
 console.log(productos);
-console.log(productosFiltrados);
