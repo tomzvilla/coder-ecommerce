@@ -126,3 +126,15 @@
 .card-item-data{
     margin-top: 1rem;
 }
+
+.numero-art{
+    position: relative;
+    right: 1.69rem;
+    bottom: 0.85rem;
+
+    background-color: black;
+    color: white;
+    font-size: 0.55rem;
+    padding: 2px 5px 2px 5px;
+    border-radius: 50%;
+}

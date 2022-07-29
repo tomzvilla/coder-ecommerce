@@ -36,7 +36,7 @@ function agregarAlCarro(producto){
 
     // Dibuja el producto en el carro
     divCarro.innerHTML += 
-    `<div class="cart-item row">
+    `<div class="cart-item row" id="producto-${producto.id}">
         <div class="col-3 img-cart-wrapper">
             <img class="img-cart" src="public/img/000000.png" alt="imagen producto" class="img-fluid">
         </div>
@@ -45,7 +45,7 @@ function agregarAlCarro(producto){
                 <div class="d-flex flex-row justify-content-between">
                     <h5>${producto.nombre} ${producto.marca} </h5>
                     <div class="cart-icon-delete text-right">
-                        <button type="button" class="btn btn-delete">
+                        <button onclick="borrarDelCarro(${producto.id})" id="del-cart-${producto.id}" type="button" class="btn btn-delete">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </div>
@@ -53,8 +53,8 @@ function agregarAlCarro(producto){
                 <h6 class="precio">$ ${producto.precio}</h6>
             </div>
         </div>
-        
-    </div>`
+    </div>`;
+    document.getElementById("cart-quantity").innerText = carrito.length;
 }
 
 function borrarDelCarro(idProducto){
@@ -62,23 +62,26 @@ function borrarDelCarro(idProducto){
     
     if(index != -1){
         carrito.splice(index, 1);
+        document.getElementById(`producto-${idProducto}`).remove();
     }
-
+    document.getElementById("cart-quantity").innerText = carrito.length;
     console.log(carrito);
 }
+
+
 
 function calcularTotal(listadoCarro){
     // Se reinicia la variable
     total = 0;
-    for(const producto of listadoCarro){
+    listadoCarro.forEach((producto) =>{
         total+= producto.precio;
-    }
+    })
     console.log(total);
 }
 
 // Me crea una card de bootstrap por cada producto del listado
 function mostrarProductos(listado){
-    for(const producto of listado){
+    listado.forEach((producto)=>{
         divListado.innerHTML +=
         `<div class="col"> 
             <div class="card">
@@ -87,21 +90,23 @@ function mostrarProductos(listado){
                     <h5 class='card-title'> ${producto.nombre} ${producto.marca}</h5>
                     <h6 class='card-subtitle mb-2 text-muted'>$ ${producto.precio}</h6>
                     <div class="card-content d-flex justify-content-center align-items-center">
-                        <button href="#" class="btn btn-primary">Agregar al carro</button>
+                        <button id='add-cart-${producto.id}' class="btn btn-primary">Agregar al carro</button>
                     </div>
                 </div>
             </div>
         </div>`;
-    }    
+    }) 
     
 }
+
 
 // Se solicita que el usuario ingrese un producto o marca, y se guarda
 const respuesta = prompt("Ingrese el producto o marca que está buscando. (Ingrese Todos para ver el listado completo)");
 
 // Si el usuario ingreso TODOS
 if (respuesta.toUpperCase() == "TODOS"){
-    mostrarProductos(productos);
+    productosFiltrados = productos
+    mostrarProductos(productosFiltrados);
 }
 else {
     productosFiltrados = productos.filter((el) => el.nombre.toUpperCase() == respuesta.toUpperCase() || el.marca.toUpperCase() == respuesta.toUpperCase());
@@ -111,15 +116,9 @@ else {
         mostrarProductos(productosFiltrados);
     }
 }
+productosFiltrados.forEach((producto)=>{
+    document.getElementById(`add-cart-${producto.id}`).addEventListener("click",()=>{
+        agregarAlCarro(producto);
+    })
+})
 
-// Simulacion del proceso
-
-// Se agregan dos productos al carro, se calcula el total, y se eliminan algunos productos
-agregarAlCarro({id:60, nombre:"Pantalones", marca:"Adidas", precio: 8000});
-agregarAlCarro({ id:59, nombre:"Pantalones", marca:"Nike", precio:9500});
-
-calcularTotal(carrito);
-borrarDelCarro(60);
-calcularTotal(carrito);
-
-console.log(productos);
