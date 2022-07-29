@@ -16,7 +16,7 @@
                 <a href="#" class="navbar-brand">E-Commerce</a>
                 <div class="icon-wrapper">
                     <div class="cart-wrapper" id="iconSM">
-                        <span class="cart-icon">
+                        <span class="cart-icon" data-bs-toggle="offcanvas" data-bs-target="#offCanvasCart" aria-controls="offCanvasCart">
                             <i class="fa-solid fa-cart-shopping fa-2x"></i>
                         </span>
                     </div>
@@ -42,17 +42,30 @@
                         </span>
                     </div>
                     <div class="cart-wrapper">
-                        <span class="cart-icon" id="iconBG">
+                        <span class="cart-icon" id="iconBG" data-bs-toggle="offcanvas" data-bs-target="#offCanvasCart" aria-controls="offCanvasCart">
                             <i class="fa-solid fa-cart-shopping fa-2x"></i>
                         </span>
                     </div>
                 </div>
-                
             </div>
         </nav>
     </header>
+    
     <main class="main-wrapper">
         <div class="container-fluid">
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offCanvasCart" aria-labelledby="offCanvasCartLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offCanvasCartLabel">
+                        Carrito
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div id="items-wrapper">
+                        
+                    </div>
+                </div>
+            </div>
             <h1 class="text-center display-1"> E-Commerce</h1>
             <div class="row row-cols-1 row-cols-md-4 g-4" id="listadoProductos">
             </div>

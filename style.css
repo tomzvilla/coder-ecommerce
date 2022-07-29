@@ -100,3 +100,29 @@
         top: 3px;
     }
 }
+
+
+.cart-item{
+   height: 80px;
+   margin-top: 1.5rem;
+}
+
+.precio{
+    text-align: end;
+    margin-top: 1.25rem;
+}
+.img-cart-wrapper{
+    padding: 0;
+}
+.img-cart{
+    width: 100%;
+    margin: 5px;
+}
+
+.btn-delete{
+    padding: 0;
+}
+
+.card-item-data{
+    margin-top: 1rem;
+}

@@ -15,6 +15,10 @@ const productos =[
 // Tomo el div donde se insertaran los productos
 const divListado = document.getElementById("listadoProductos");
 
+//Tomo el div donde se insertan los productos en el carro
+
+const divCarro = document.getElementById("items-wrapper");
+
 // Array que contiene los productos en el carro, por ahora no se utiliza
 const carrito = [];
 let total = 0;
@@ -26,8 +30,31 @@ productos.push({id:60, nombre:"Pantalones", marca:"Adidas", precio: 8000});
 
 // Funcion para agregar un producto al carro, no se utiliza por el momento
 function agregarAlCarro(producto){
+    // Agrega el producto al array del carro
     carrito.push(producto);
     console.log(carrito);
+
+    // Dibuja el producto en el carro
+    divCarro.innerHTML += 
+    `<div class="cart-item row">
+        <div class="col-3 img-cart-wrapper">
+            <img class="img-cart" src="public/img/000000.png" alt="imagen producto" class="img-fluid">
+        </div>
+        <div class="col-9">
+            <div class="w-100 card-item-data">
+                <div class="d-flex flex-row justify-content-between">
+                    <h5>${producto.nombre} ${producto.marca} </h5>
+                    <div class="cart-icon-delete text-right">
+                        <button type="button" class="btn btn-delete">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+                <h6 class="precio">$ ${producto.precio}</h6>
+            </div>
+        </div>
+        
+    </div>`
 }
 
 function borrarDelCarro(idProducto){
@@ -52,9 +79,19 @@ function calcularTotal(listadoCarro){
 // Me crea una card de bootstrap por cada producto del listado
 function mostrarProductos(listado){
     for(const producto of listado){
-        divListado.innerHTML += `<div class="col"> <div class="card"><img src="public/img/000000.png" alt="imagen producto" class="card-img-top"><div class='card-body'><h5 class='card-title'> ${producto.nombre} ${producto.marca}</h5><h6 class='card-subtitle mb-2 text-muted'>$ ${producto.precio}</h6><div class="card-content d-flex justify-content-center align-items-center">
-        <button href="#" class="btn btn-primary">Agregar al carro</button>
-    </div></div></div></div>`;
+        divListado.innerHTML +=
+        `<div class="col"> 
+            <div class="card">
+                <img src="public/img/000000.png" alt="imagen producto" class="card-img-top">
+                <div class='card-body'>
+                    <h5 class='card-title'> ${producto.nombre} ${producto.marca}</h5>
+                    <h6 class='card-subtitle mb-2 text-muted'>$ ${producto.precio}</h6>
+                    <div class="card-content d-flex justify-content-center align-items-center">
+                        <button href="#" class="btn btn-primary">Agregar al carro</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
     }    
     
 }
