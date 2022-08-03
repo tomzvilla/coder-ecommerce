@@ -37,15 +37,8 @@ let productosFiltrados = [];
 // Se agrega un producto al listado para probar el método push
 productos.push(new Producto(60, "Pantalones", "Adidas", 8000))
 
-// mostrarProductos(productos);
-// productos.forEach((producto)=>{
-//     document.getElementById(`add-cart-${producto.id}`).addEventListener("click",()=>{
-//     agregarAlCarro(producto)
-// })
-// })
+mostrarProductos(productos);
 
-// Funcionalidad del input
-// let barra = document.getElementById("searchBar").addEventListener("submit", filtrarProductos);
 
 // Funcion para agregar un producto al carro, no se utiliza por el momento
 function agregarAlCarro(producto){
@@ -98,6 +91,14 @@ function calcularTotal(listadoCarro){
     console.log(total);
 }
 
+function addEventos(listados){
+    listados.forEach((producto)=>{
+        document.getElementById(`add-cart-${producto.id}`).addEventListener("click",()=>{
+        agregarAlCarro(producto)
+    })
+    })
+}
+
 // Me crea una card de bootstrap por cada producto del listado
 function mostrarProductos(listado){
     divListado.innerHTML = "";
@@ -116,48 +117,30 @@ function mostrarProductos(listado){
             </div>
         </div>`;
     }) 
-    
+    addEventos(listado);
 }
 
+let barra = document.getElementById("searchForm");
+barra.addEventListener('submit', filtrarProductos)
 
-// // Se solicita que el usuario ingrese un producto o marca, y se guarda
-const respuesta = prompt("Ingrese el producto o marca que está buscando. (Ingrese Todos para ver el listado completo)");
+function filtrarProductos(event) {
+    let filter = document.getElementById("searchBar").value.toUpperCase();
+    if(filter === ""){
+        mostrarProductos(productos);
+    }
+    else{
+        productosFiltrados = productos.filter((el) => el.nombre.toUpperCase() == filter || el.marca.toUpperCase() == filter);
+        if(productosFiltrados.length == 0){
+            divListado.innerHTML = "<div class='display-5'> No se encontraron productos </div>"
+        }
+        else
+        {
+            mostrarProductos(productosFiltrados);
+        }
+    }
 
-// Si el usuario ingreso TODOS
- if (respuesta.toUpperCase() == "TODOS"){
-     productosFiltrados = productos
-     mostrarProductos(productosFiltrados);
- }
- else {
-     productosFiltrados = productos.filter((el) => el.nombre.toUpperCase() == respuesta.toUpperCase() || el.marca.toUpperCase() == respuesta.toUpperCase());     
-     if(productosFiltrados.length == 0){
-         divListado.innerHTML = "<div class='display-5'> No se encontraron productos </div>"
-     } else{
-         mostrarProductos(productosFiltrados);
-     }
- }
- productosFiltrados.forEach((producto)=>{
-     document.getElementById(`add-cart-${producto.id}`).addEventListener("click",()=>{
-     agregarAlCarro(producto)
- })
- })
-
-
-// let barra = document.getElementById("searchForm");
-// barra.addEventListener('submit', filtrarProductos)
-
-// function filtrarProductos() {
-    
-//     let filter = document.getElementById("searchBar").value.toUpperCase();
-//     productosFiltrados = productos.filter((el) => el.nombre.toUpperCase() == filter || el.marca.toUpperCase() == filter);
-//     if(productosFiltrados.length == 0){
-//         divListado.innerHTML = "<div class='display-5'> No se encontraron productos </div>"
-//     }
-//     else
-//     {
-//         mostrarProductos(productosFiltrados);  
-//     }
-//   }
+    event.preventDefault()
+}
 
 
 
