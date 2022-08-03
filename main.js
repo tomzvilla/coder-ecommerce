@@ -1,16 +1,25 @@
+class Producto{
+    constructor(id, nombre, marca, precio){
+        this.id = id;
+        this.nombre = nombre;
+        this.marca = marca;
+        this.precio = precio
+    }
+}
 
 // Listado de productos, se deberia obtener del backend
 const productos =[
-    { id:51, nombre:"Zapatillas", marca:"Nike", precio:12000},
-    { id:52, nombre:"Zapatillas", marca:"Adidas", precio:12500},
-    { id:53, nombre:"Zapatillas", marca:"Converse", precio:8500},
-    { id:54, nombre:"Remera", marca:"Gucci", precio:19000},
-    { id:55, nombre:"Remera", marca:"Lacoste", precio:11000},
-    { id:56, nombre:"Buzo", marca:"Supreme", precio:22000},
-    { id:57, nombre:"Buzo", marca:"Gucci", precio:25000},
-    { id:58, nombre:"Camisa", marca:"Lacoste", precio: 9500},
-    { id:59, nombre:"Pantalones", marca:"Nike", precio:9500},
+    new Producto(51, "Zapatillas", "Nike", 12000),
+    new Producto(52, "Zapatillas", "Converse", 8500),
+    new Producto(53, "Zapatillas", "Adidas", 12500),
+    new Producto(54, "Remera", "Gucci", 19000),
+    new Producto(55, "Remera", "Lacoste", 11000),
+    new Producto(56, "Buzo", "Supreme", 22000),
+    new Producto(57, "Buzo", "Gucci", 25000),
+    new Producto(58, "Camisa", "Lacoste", 9500),
+    new Producto(59, "Pantalones", "Nike", 9500),
 ];
+
 
 // Tomo el div donde se insertaran los productos
 const divListado = document.getElementById("listadoProductos");
@@ -26,7 +35,17 @@ let total = 0;
 let productosFiltrados = [];
 
 // Se agrega un producto al listado para probar el método push
-productos.push({id:60, nombre:"Pantalones", marca:"Adidas", precio: 8000});
+productos.push(new Producto(60, "Pantalones", "Adidas", 8000))
+
+// mostrarProductos(productos);
+// productos.forEach((producto)=>{
+//     document.getElementById(`add-cart-${producto.id}`).addEventListener("click",()=>{
+//     agregarAlCarro(producto)
+// })
+// })
+
+// Funcionalidad del input
+// let barra = document.getElementById("searchBar").addEventListener("submit", filtrarProductos);
 
 // Funcion para agregar un producto al carro, no se utiliza por el momento
 function agregarAlCarro(producto){
@@ -81,6 +100,7 @@ function calcularTotal(listadoCarro){
 
 // Me crea una card de bootstrap por cada producto del listado
 function mostrarProductos(listado){
+    divListado.innerHTML = "";
     listado.forEach((producto)=>{
         divListado.innerHTML +=
         `<div class="col"> 
@@ -100,25 +120,48 @@ function mostrarProductos(listado){
 }
 
 
-// Se solicita que el usuario ingrese un producto o marca, y se guarda
+// // Se solicita que el usuario ingrese un producto o marca, y se guarda
 const respuesta = prompt("Ingrese el producto o marca que está buscando. (Ingrese Todos para ver el listado completo)");
 
 // Si el usuario ingreso TODOS
-if (respuesta.toUpperCase() == "TODOS"){
-    productosFiltrados = productos
-    mostrarProductos(productosFiltrados);
-}
-else {
-    productosFiltrados = productos.filter((el) => el.nombre.toUpperCase() == respuesta.toUpperCase() || el.marca.toUpperCase() == respuesta.toUpperCase());
-    if(productosFiltrados.length == 0){
-        divListado.innerHTML = "<div class='display-5'> No se encontraron productos </div>"
-    } else{
-        mostrarProductos(productosFiltrados);
-    }
-}
-productosFiltrados.forEach((producto)=>{
-    document.getElementById(`add-cart-${producto.id}`).addEventListener("click",()=>{
-        agregarAlCarro(producto);
-    })
-})
+ if (respuesta.toUpperCase() == "TODOS"){
+     productosFiltrados = productos
+     mostrarProductos(productosFiltrados);
+ }
+ else {
+     productosFiltrados = productos.filter((el) => el.nombre.toUpperCase() == respuesta.toUpperCase() || el.marca.toUpperCase() == respuesta.toUpperCase());     
+     if(productosFiltrados.length == 0){
+         divListado.innerHTML = "<div class='display-5'> No se encontraron productos </div>"
+     } else{
+         mostrarProductos(productosFiltrados);
+     }
+ }
+ productosFiltrados.forEach((producto)=>{
+     document.getElementById(`add-cart-${producto.id}`).addEventListener("click",()=>{
+     agregarAlCarro(producto)
+ })
+ })
+
+
+// let barra = document.getElementById("searchForm");
+// barra.addEventListener('submit', filtrarProductos)
+
+// function filtrarProductos() {
+    
+//     let filter = document.getElementById("searchBar").value.toUpperCase();
+//     productosFiltrados = productos.filter((el) => el.nombre.toUpperCase() == filter || el.marca.toUpperCase() == filter);
+//     if(productosFiltrados.length == 0){
+//         divListado.innerHTML = "<div class='display-5'> No se encontraron productos </div>"
+//     }
+//     else
+//     {
+//         mostrarProductos(productosFiltrados);  
+//     }
+//   }
+
+
+
+
+
+
 
