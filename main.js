@@ -20,6 +20,16 @@ const productos =[
     new Producto(59, "Pantalones", "Nike", 9500),
 ];
 
+// Se agrega un producto al listado para probar el método push
+productos.push(new Producto(60, "Pantalones", "Adidas", 8000))
+
+
+function guardarLocal(clave, valor){
+    localStorage.setItem(clave,valor);
+}
+
+guardarLocal("listadoProductos", JSON.stringify(productos));
+
 
 // Tomo el div donde se insertaran los productos
 const divListado = document.getElementById("listadoProductos");
@@ -29,44 +39,54 @@ const divListado = document.getElementById("listadoProductos");
 const divCarro = document.getElementById("items-wrapper");
 
 // Array que contiene los productos en el carro, por ahora no se utiliza
-const carrito = [];
+let carrito = JSON.parse(localStorage.getItem("carritoLS")) ?? [];
+document.getElementById("cart-quantity").innerText = carrito.length;
+renderCarro(carrito);
+
 let total = 0;
 
 let productosFiltrados = [];
 
-// Se agrega un producto al listado para probar el método push
-productos.push(new Producto(60, "Pantalones", "Adidas", 8000))
 
 mostrarProductos(productos);
 
 
-// Funcion para agregar un producto al carro, no se utiliza por el momento
+function renderCarro(carro){
+    divCarro.innerHTML = "";
+    carro.forEach((producto) => {
+        divCarro.innerHTML += 
+        `<div class="cart-item row" id="producto-${producto.id}">
+            <div class="col-3 img-cart-wrapper">
+                <img class="img-cart" src="public/img/000000.png" alt="imagen producto" class="img-fluid">
+            </div>
+            <div class="col-9">
+                <div class="w-100 card-item-data">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5>${producto.nombre} ${producto.marca} </h5>
+                        <div class="cart-icon-delete text-right">
+                            <button onclick="borrarDelCarro(${producto.id})" id="del-cart-${producto.id}" type="button" class="btn btn-delete">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <h6 class="precio">$ ${producto.precio}</h6>
+                </div>
+            </div>
+        </div>`;
+    })
+    
+}
+
+calcularTotal(carrito);
+
+// Funcion para agregar un producto al carro
 function agregarAlCarro(producto){
     // Agrega el producto al array del carro
     carrito.push(producto);
-    console.log(carrito);
-
-    // Dibuja el producto en el carro
-    divCarro.innerHTML += 
-    `<div class="cart-item row" id="producto-${producto.id}">
-        <div class="col-3 img-cart-wrapper">
-            <img class="img-cart" src="public/img/000000.png" alt="imagen producto" class="img-fluid">
-        </div>
-        <div class="col-9">
-            <div class="w-100 card-item-data">
-                <div class="d-flex flex-row justify-content-between">
-                    <h5>${producto.nombre} ${producto.marca} </h5>
-                    <div class="cart-icon-delete text-right">
-                        <button onclick="borrarDelCarro(${producto.id})" id="del-cart-${producto.id}" type="button" class="btn btn-delete">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-                <h6 class="precio">$ ${producto.precio}</h6>
-            </div>
-        </div>
-    </div>`;
+    guardarLocal("carritoLS", JSON.stringify(carrito));
     document.getElementById("cart-quantity").innerText = carrito.length;
+    calcularTotal(carrito);
+    renderCarro(carrito);
 }
 
 function borrarDelCarro(idProducto){
@@ -77,18 +97,25 @@ function borrarDelCarro(idProducto){
         document.getElementById(`producto-${idProducto}`).remove();
     }
     document.getElementById("cart-quantity").innerText = carrito.length;
-    console.log(carrito);
+    guardarLocal("carritoLS", JSON.stringify(carrito));
+    calcularTotal(carrito);
 }
 
 
 
 function calcularTotal(listadoCarro){
     // Se reinicia la variable
-    total = 0;
-    listadoCarro.forEach((producto) =>{
-        total+= producto.precio;
-    })
-    console.log(total);
+    total = listadoCarro.length > 0 ? listadoCarro.reduce((acc, el) => acc + Number(el.precio),0) : 0;
+    document.getElementById("precio").innerText = `$ ${total}`;
+    let cartDiv = document.getElementById("cart-info");
+    if(total === 0){
+        cartDiv.classList.remove("show");
+        cartDiv.classList.add("hide")
+    }else{
+        cartDiv.classList.add("show");
+        cartDiv.classList.remove("hide")
+    }
+    
 }
 
 function addEventos(listados){
