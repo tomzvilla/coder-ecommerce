@@ -1,27 +1,28 @@
 class Producto{
-    constructor(id, nombre, marca, precio){
+    constructor(id, nombre, marca, precio, img){
         this.id = id;
         this.nombre = nombre;
         this.marca = marca;
         this.precio = precio
+        this.img = img;
     }
 }
 
 // Listado de productos, se deberia obtener del backend
 const productos =[
-    new Producto(51, "Zapatillas", "Nike", 12000),
-    new Producto(52, "Zapatillas", "Converse", 8500),
-    new Producto(53, "Zapatillas", "Adidas", 12500),
-    new Producto(54, "Remera", "Gucci", 19000),
-    new Producto(55, "Remera", "Lacoste", 11000),
-    new Producto(56, "Buzo", "Supreme", 22000),
-    new Producto(57, "Buzo", "Gucci", 25000),
-    new Producto(58, "Camisa", "Lacoste", 9500),
-    new Producto(59, "Pantalones", "Nike", 9500),
+    new Producto(51, "Zapatillas", "Nike", 12000,"https://static.nike.com/a/images/f_auto/dpr_1.0,cs_srgb/w_581,c_limit/0211c46f-29ec-4662-8674-2a654ee9224d/nike-air-huarache-liverpool.png"),
+    new Producto(52, "Zapatillas", "Converse", 8500,"https://backend.converse.com.ar/media/image/8c/f8/faf5e538823196481f411e778ea6.jpg"),
+    new Producto(53, "Zapatillas", "Adidas", 12500,"https://assets.adidas.com/images/w_600,f_auto,q_auto/09c5ea6df1bd4be6baaaac5e003e7047_9366/Zapatillas_Forum_Low_Blanco_FY7756_01_standard.jpg"),
+    new Producto(54, "Remera", "Gucci", 19000, "https://media.gucci.com/style/DarkGray_South_0_160_316x316/1654727449/703439_XJEIY_9095_001_100_0000_Light-Gucci-pear-print-cotton-T-shirt.jpg"),
+    new Producto(55, "Remera", "Lacoste", 11000, "//imagesa1.lacoste.com/dw/image/v2/BCWL_PRD/on/demandware.static/-/Sites-master/default/dw6fb91508/TH7391_786_24.jpg?imwidth=915&impolicy=product"),
+    new Producto(56, "Buzo", "Supreme", 22000, "//assets.supremenewyork.com/227599/zo/Xcqf1CCpmu9.jpg"),
+    new Producto(57, "Buzo", "Gucci", 25000, "//media.gucci.com/style/DarkGray_South_0_160_316x316/1620743404/454585_X5J57_9541_001_100_0000_Light-Oversize-sweatshirt-with-Gucci-logo.jpg"),
+    new Producto(58, "Camisa", "Lacoste", 9500, "//imagesa1.lacoste.com/dw/image/v2/BCWL_PRD/on/demandware.static/-/Sites-master/default/dw00377eff/CH4990_166_24.jpg?imwidth=915&impolicy=product"),
+    new Producto(59, "Pantalones", "Nike", 9500, "https://www.dexter.com.ar/on/demandware.static/-/Sites-dabra-catalog/default/dw0f2dbf51/products/NI_CU5525-010/NI_CU5525-010-1.JPG"),
 ];
 
 // Se agrega un producto al listado para probar el método push
-productos.push(new Producto(60, "Pantalones", "Adidas", 8000))
+productos.push(new Producto(60, "Pantalones", "Adidas", 8000,"https://assets.adidas.com/images/w_600,f_auto,q_auto/00d0eeedcadb44a1b1c9ae0d0102f02a_9366/Pantalon_Adicolor_Classics_Firebird_Primeblue_Azul_HB9386_21_model.jpg"))
 
 
 function guardarLocal(clave, valor){
@@ -54,22 +55,23 @@ mostrarProductos(productos);
 function renderCarro(carro){
     divCarro.innerHTML = "";
     carro.forEach((producto) => {
+        const {id ,nombre, marca, precio, img} = producto;
         divCarro.innerHTML += 
-        `<div class="cart-item row" id="producto-${producto.id}">
+        `<div class="cart-item row" id="producto-${id}">
             <div class="col-3 img-cart-wrapper">
-                <img class="img-cart" src="public/img/000000.png" alt="imagen producto" class="img-fluid">
+                <img class="img-cart" src="${img}" alt="imagen producto" class="img-fluid">
             </div>
             <div class="col-9">
                 <div class="w-100 card-item-data">
                     <div class="d-flex flex-row justify-content-between">
-                        <h5>${producto.nombre} ${producto.marca} </h5>
+                        <h5>${nombre} ${marca} </h5>
                         <div class="cart-icon-delete text-right">
-                            <button onclick="borrarDelCarro(${producto.id})" id="del-cart-${producto.id}" type="button" class="btn btn-delete">
+                            <button onclick="borrarDelCarro(${id})" id="del-cart-${id}" type="button" class="btn btn-delete">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
                     </div>
-                    <h6 class="precio">$ ${producto.precio}</h6>
+                    <h6 class="precio">$ ${precio}</h6>
                 </div>
             </div>
         </div>`;
@@ -130,15 +132,16 @@ function addEventos(listados){
 function mostrarProductos(listado){
     divListado.innerHTML = "";
     listado.forEach((producto)=>{
+        const {id ,nombre, marca, precio, img} = producto;
         divListado.innerHTML +=
         `<div class="col"> 
             <div class="card">
-                <img src="public/img/000000.png" alt="imagen producto" class="card-img-top">
+                <img src="${img}" alt="imagen producto" class="card-img-top card-image">
                 <div class='card-body'>
-                    <h5 class='card-title'> ${producto.nombre} ${producto.marca}</h5>
-                    <h6 class='card-subtitle mb-2 text-muted'>$ ${producto.precio}</h6>
+                    <h5 class='card-title'> ${nombre} ${marca}</h5>
+                    <h6 class='card-subtitle mb-2 text-muted'>$ ${precio}</h6>
                     <div class="card-content d-flex justify-content-center align-items-center">
-                        <button id='add-cart-${producto.id}' class="btn btn-primary">Agregar al carro</button>
+                        <button id='add-cart-${id}' class="btn btn-primary">Agregar al carro</button>
                     </div>
                 </div>
             </div>

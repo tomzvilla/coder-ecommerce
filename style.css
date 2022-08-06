@@ -65,6 +65,14 @@
     transition: 50ms ease-in-out;
 }
 
+.card-image{
+    height: auto;
+}
+@media screen and (min-width:768px){
+    .card-image{
+        height: 190px;
+    }
+}
 @media screen and (min-width:1024px) {
     #iconSM{
         display: none;
@@ -99,11 +107,20 @@
         position: relative;
         top: 3px;
     }
+
+    .card-image{
+        height: 350px;
+    }
 }
 
+@media screen and (min-width:1600px) {
+    .card-image{
+        height: 400px;
+    }
+}
 
 .cart-item{
-   height: 80px;
+   max-height: 80px;
    margin-top: 1.5rem;
 }
 
@@ -115,6 +132,7 @@
     padding: 0;
 }
 .img-cart{
+    max-height: 94px;
     width: 100%;
     margin: 5px;
 }
