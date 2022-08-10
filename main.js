@@ -82,7 +82,7 @@ function renderCarro(carro){
 // Funcion para agregar un producto al carro
 function agregarAlCarro(producto){
     // Agrega el producto al array del carro
-    carrito.push(producto);
+    carrito = [...carrito, producto];
     guardarLocal("carritoLS", JSON.stringify(carrito));
     document.getElementById("cart-quantity").innerText = carrito.length;
     calcularTotal(carrito);
