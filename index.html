@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/a039fbd5d2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="style.css">
     <title>E-commerce</title>
 </head>
@@ -37,7 +38,7 @@
                         <form role="search" id="searchForm">
                             <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar" id="searchBar">
                         </form>
-                        <span class="search-icon">
+                        <span class="search-icon" id="search-icon">
                             <i id="lupa" class="fa-solid fa-magnifying-glass fa-2x"></i>
                         </span>
                     </div>
@@ -60,6 +61,10 @@
                     <h5 class="offcanvas-title" id="offCanvasCartLabel">
                         Carrito
                     </h5>
+                    <div class="delete-cart-wrapper d-flex flex-row-reverse" id="delete-icon">
+                        <p>Vaciar Carro</p>
+                        <i class="fa-solid fa-trash-can"></i>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -82,8 +87,8 @@
             </div>
         </div> 
     </main>
-
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
     <script src="main.js"></script>

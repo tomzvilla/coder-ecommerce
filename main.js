@@ -44,7 +44,10 @@ let total = 0;
 let productosFiltrados = [];
 
 let barra = document.getElementById("searchForm");
-barra.addEventListener('submit', filtrarProductos)
+let lupa = document.getElementById("search-icon");
+let trashbin = document.getElementById("delete-icon").addEventListener("click", vaciarCarro);
+barra.addEventListener('submit', filtrarProductos);
+lupa.addEventListener("click", filtrarProductos);
 
 
 function guardarLocal(clave, valor){
@@ -84,24 +87,74 @@ function agregarAlCarro(producto){
     // Agrega el producto al array del carro
     carrito = [...carrito, producto];
     guardarLocal("carritoLS", JSON.stringify(carrito));
+    alertaCarro(producto);
     document.getElementById("cart-quantity").innerText = carrito.length;
     calcularTotal(carrito);
     renderCarro(carrito);
 }
 
-function borrarDelCarro(idProducto){
-    const index = carrito.findIndex((producto) => producto.id == idProducto);
-    
-    if(index != -1){
-        carrito.splice(index, 1);
-        document.getElementById(`producto-${idProducto}`).remove();
-    }
-    document.getElementById("cart-quantity").innerText = carrito.length;
-    guardarLocal("carritoLS", JSON.stringify(carrito));
-    calcularTotal(carrito);
+
+function alertaCarro(producto){
+    const {nombre, marca} = producto;
+    Swal.fire({
+        title: '¡Genial!',
+        text: `Agregaste ${nombre} ${marca} al carro!!!`,
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      });
+    Toastify({
+        text: `Agregaste ${nombre} ${marca} al carro`,
+        duration: 1500,
+        close: false,
+        gravity: "top", 
+        position: "right", 
+        stopOnFocus: false,
+        style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+      }).showToast();
 }
 
+function borrarDelCarro(idProducto){
+    const index = carrito.findIndex((producto) => producto.id == idProducto);
+    Swal.fire({
+        title: `¿Desea eliminar el producto ?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Si",
+        cancelButtonText: "No"
+    }).then((result) =>{
+        if(result.isConfirmed){
+            if(index != -1){
+                carrito.splice(index, 1);
+                document.getElementById(`producto-${idProducto}`).remove();
+            }
+            document.getElementById("cart-quantity").innerText = carrito.length;
+            guardarLocal("carritoLS", JSON.stringify(carrito));
+            calcularTotal(carrito);
+        }
+    })
 
+}
+
+function vaciarCarro(event){
+    if(carrito.length == 0) return;
+    Swal.fire({
+        title: `¿Desea vaciar el carro ?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Si",
+        cancelButtonText: "No"
+    }).then((result) =>{
+        if(result.isConfirmed){
+            carrito = [];
+            document.getElementById("cart-quantity").innerText = carrito.length;
+            guardarLocal("carritoLS", JSON.stringify(carrito));
+            renderCarro(carrito);
+            calcularTotal(carrito);
+        }
+    })
+}
 
 function calcularTotal(listadoCarro){
     // Se reinicia la variable

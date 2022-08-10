@@ -169,3 +169,16 @@
 .show{
     opacity: 1;
 }
+
+.delete-cart-wrapper{
+    font-size: 1.25rem ;
+    font-weight: 500;
+    margin-top: 1.15rem;
+    cursor: pointer;
+}
+
+
+.delete-cart-wrapper i{
+    margin-top: 0.40rem;
+    margin-right: 0.25rem;
+}
