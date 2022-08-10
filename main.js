@@ -1,3 +1,5 @@
+// Definicion de producto
+
 class Producto{
     constructor(id, nombre, marca, precio, img){
         this.id = id;
@@ -25,12 +27,7 @@ const productos =[
 productos.push(new Producto(60, "Pantalones", "Adidas", 8000,"https://assets.adidas.com/images/w_600,f_auto,q_auto/00d0eeedcadb44a1b1c9ae0d0102f02a_9366/Pantalon_Adicolor_Classics_Firebird_Primeblue_Azul_HB9386_21_model.jpg"))
 
 
-function guardarLocal(clave, valor){
-    localStorage.setItem(clave,valor);
-}
-
-guardarLocal("listadoProductos", JSON.stringify(productos));
-
+// Se inician variables
 
 // Tomo el div donde se insertaran los productos
 const divListado = document.getElementById("listadoProductos");
@@ -39,18 +36,20 @@ const divListado = document.getElementById("listadoProductos");
 
 const divCarro = document.getElementById("items-wrapper");
 
-// Array que contiene los productos en el carro, por ahora no se utiliza
+// Array que contiene los productos en el carro
 let carrito = JSON.parse(localStorage.getItem("carritoLS")) ?? [];
-document.getElementById("cart-quantity").innerText = carrito.length;
-renderCarro(carrito);
 
 let total = 0;
 
 let productosFiltrados = [];
 
+let barra = document.getElementById("searchForm");
+barra.addEventListener('submit', filtrarProductos)
 
-mostrarProductos(productos);
 
+function guardarLocal(clave, valor){
+    localStorage.setItem(clave,valor);
+}
 
 function renderCarro(carro){
     divCarro.innerHTML = "";
@@ -79,7 +78,6 @@ function renderCarro(carro){
     
 }
 
-calcularTotal(carrito);
 
 // Funcion para agregar un producto al carro
 function agregarAlCarro(producto){
@@ -150,9 +148,6 @@ function mostrarProductos(listado){
     addEventos(listado);
 }
 
-let barra = document.getElementById("searchForm");
-barra.addEventListener('submit', filtrarProductos)
-
 function filtrarProductos(event) {
     let filter = document.getElementById("searchBar").value.toUpperCase();
     if(filter === ""){
@@ -173,8 +168,19 @@ function filtrarProductos(event) {
 }
 
 
+// Llamadas a funciones
+
+guardarLocal("listadoProductos", JSON.stringify(productos));
 
 
+document.getElementById("cart-quantity").innerText = carrito.length;
+
+renderCarro(carrito);
+
+
+mostrarProductos(productos);
+
+calcularTotal(carrito);
 
 
 
