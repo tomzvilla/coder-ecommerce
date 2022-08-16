@@ -1,7 +1,7 @@
 // Definicion de producto
 
 class Producto{
-    constructor(id, nombre, marca, precio, img){
+    constructor(id, nombre, marca, precio, img, cantidadEnCarro){
         this.id = id;
         this.nombre = nombre;
         this.marca = marca;
@@ -43,12 +43,13 @@ let total = 0;
 
 let productosFiltrados = [];
 
+let boton = document.getElementById("btn-buy")
 let barra = document.getElementById("searchForm");
 let lupa = document.getElementById("search-icon");
 let trashbin = document.getElementById("delete-icon").addEventListener("click", vaciarCarro);
 barra.addEventListener('submit', filtrarProductos);
 lupa.addEventListener("click", filtrarProductos);
-
+boton.addEventListener("click", realizarCompra);
 
 function guardarLocal(clave, valor){
     localStorage.setItem(clave,valor);
@@ -56,8 +57,9 @@ function guardarLocal(clave, valor){
 
 function renderCarro(carro){
     divCarro.innerHTML = "";
-    carro.forEach((producto) => {
-        const {id ,nombre, marca, precio, img} = producto;
+    carro.forEach((productoCarro) => {
+        let item = productos.find((producto)=> producto.id == productoCarro.id)
+        const {id ,nombre, marca, precio, img} = item;
         divCarro.innerHTML += 
         `<div class="cart-item row" id="producto-${id}">
             <div class="col-3 img-cart-wrapper">
@@ -73,7 +75,14 @@ function renderCarro(carro){
                             </button>
                         </div>
                     </div>
-                    <h6 class="precio">$ ${precio}</h6>
+                    <div class="input-wrapper d-flex justify-content-between align-items-center">
+                        <div id ="buttons">
+                            <i class="fa-solid fa-minus" onclick=decrementar(${id})></i>  
+                            <div id="${id}" class="quantity"> ${productoCarro.cantidad} </div>
+                            <i class="fa-solid fa-plus"onclick=incrementar(${id})></i>
+                        </div>
+                        <h6 class="precio d-inline">$ ${precio}</h6>
+                    </div>
                 </div>
             </div>
         </div>`;
@@ -85,23 +94,26 @@ function renderCarro(carro){
 // Funcion para agregar un producto al carro
 function agregarAlCarro(producto){
     // Agrega el producto al array del carro
-    carrito = [...carrito, producto];
+
+    const index = carrito.findIndex((productoCarro) => productoCarro.id == producto.id);
+    if(index != -1){
+        carrito[index].cantidad++;
+    }
+    else{
+        carrito = [...carrito, {id: producto.id, cantidad: 1}];
+    }
     guardarLocal("carritoLS", JSON.stringify(carrito));
+    
     alertaCarro(producto);
-    document.getElementById("cart-quantity").innerText = carrito.length;
+    document.getElementById("cart-quantity").innerText = getCantidad(carrito);
     calcularTotal(carrito);
     renderCarro(carrito);
+    
 }
 
 
 function alertaCarro(producto){
     const {nombre, marca} = producto;
-    Swal.fire({
-        title: '¡Genial!',
-        text: `Agregaste ${nombre} ${marca} al carro!!!`,
-        icon: 'success',
-        confirmButtonText: 'Ok'
-      });
     Toastify({
         text: `Agregaste ${nombre} ${marca} al carro`,
         duration: 1500,
@@ -129,7 +141,7 @@ function borrarDelCarro(idProducto){
                 carrito.splice(index, 1);
                 document.getElementById(`producto-${idProducto}`).remove();
             }
-            document.getElementById("cart-quantity").innerText = carrito.length;
+            document.getElementById("cart-quantity").innerText = getCantidad(carrito);
             guardarLocal("carritoLS", JSON.stringify(carrito));
             calcularTotal(carrito);
         }
@@ -148,7 +160,7 @@ function vaciarCarro(event){
     }).then((result) =>{
         if(result.isConfirmed){
             carrito = [];
-            document.getElementById("cart-quantity").innerText = carrito.length;
+            document.getElementById("cart-quantity").innerText = getCantidad(carrito);
             guardarLocal("carritoLS", JSON.stringify(carrito));
             renderCarro(carrito);
             calcularTotal(carrito);
@@ -157,16 +169,30 @@ function vaciarCarro(event){
 }
 
 function calcularTotal(listadoCarro){
+
     // Se reinicia la variable
-    total = listadoCarro.length > 0 ? listadoCarro.reduce((acc, el) => acc + Number(el.precio),0) : 0;
+    total = 0
+    listadoCarro.forEach((productoCarro) =>{
+        let item  = productos.find((p)=> p.id == productoCarro.id)
+        total += productoCarro.cantidad * item.precio ;
+        
+    })
+    // total = listadoCarro.length > 0 ? listadoCarro.reduce((acc, el) => acc + Number(el.precio),0) : 0;
     document.getElementById("precio").innerText = `$ ${total}`;
     let cartDiv = document.getElementById("cart-info");
+
     if(total === 0){
         cartDiv.classList.remove("show");
-        cartDiv.classList.add("hide")
+        boton.classList.remove("show");
+
+        cartDiv.classList.add("hide");
+        boton.classList.add("hide");
     }else{
         cartDiv.classList.add("show");
+        boton.classList.add("show");
+
         cartDiv.classList.remove("hide")
+        boton.classList.remove("hide")
     }
     
 }
@@ -220,13 +246,70 @@ function filtrarProductos(event) {
     event.preventDefault()
 }
 
+function realizarCompra(event){
+    // Codigo del backend para la compra
+    Swal.fire({
+        title: `¿Desea realizar la compra?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Si",
+        cancelButtonText: "No"
+    }).then((result) =>{
+        if(result.isConfirmed){
+            Swal.fire({
+                title: '¡Genial!',
+                text: `Tu compra se realizo con éxito!!!`,
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            });
+            // Se vacia el carro luego de la compra
+            carrito = [];
+            guardarLocal("carritoLS", JSON.stringify(carrito));
+            calcularTotal(carrito);
+            renderCarro(carrito);
+        }
+    })
+    
+    
+}
+
+
+function getCantidad(carro){
+    let cantidad = 0;
+    carro.forEach((producto)=>{
+        cantidad += producto.cantidad;
+    })
+    return cantidad;
+}
+
+function incrementar(idProducto){
+    let index = carrito.findIndex((producto) => producto.id == idProducto);
+    carrito[index].cantidad++;
+    guardarLocal("carritoLS", JSON.stringify(carrito));
+    calcularTotal(carrito);
+    renderCarro(carrito);
+}
+
+function decrementar(idProducto){
+    let index = carrito.findIndex((producto) => producto.id == idProducto);
+    if(carrito[index].cantidad - 1 != 0 ){
+        carrito[index].cantidad--;
+        guardarLocal("carritoLS", JSON.stringify(carrito));
+        calcularTotal(carrito);
+        renderCarro(carrito);
+    }else{
+        borrarDelCarro(idProducto);
+        
+    }
+    
+}
 
 // Llamadas a funciones
 
 guardarLocal("listadoProductos", JSON.stringify(productos));
 
 
-document.getElementById("cart-quantity").innerText = carrito.length;
+document.getElementById("cart-quantity").innerText = getCantidad(carrito);
 
 renderCarro(carrito);
 

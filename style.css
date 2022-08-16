@@ -126,7 +126,8 @@
 
 .precio{
     text-align: end;
-    margin-top: 1.25rem;
+    height: 100%;
+    font-size: 1.25rem;
 }
 .img-cart-wrapper{
     padding: 0;
@@ -135,6 +136,7 @@
     max-height: 94px;
     width: 100%;
     margin: 5px;
+    border-radius: 10px;
 }
 
 .btn-delete{
@@ -181,4 +183,45 @@
 .delete-cart-wrapper i{
     margin-top: 0.40rem;
     margin-right: 0.25rem;
+}
+
+
+.btn-custom{
+    width: 100%;
+    background-color: #808080;
+    color: #ffffff;
+    padding: 1rem;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-custom:hover{
+    background-color: #727171;
+    color: #ffffff;
+}
+
+.quantity-input{
+    height: 100%;
+    width: 5rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.input-wrapper{
+    margin-top: 1.25rem;
+}
+
+#buttons{
+    display: flex;
+    align-items: center;
+}
+
+#buttons i{
+    margin: 0 1rem;
+    cursor: pointer;
+}
+.quantity{
+    font-weight: 500;
+    font-size: 1.15rem;
 }
