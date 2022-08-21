@@ -1,7 +1,7 @@
 // Definicion de producto
 
 class Producto{
-    constructor(id, nombre, marca, precio, img, cantidadEnCarro){
+    constructor(id, nombre, marca, precio, img){
         this.id = id;
         this.nombre = nombre;
         this.marca = marca;
@@ -25,6 +25,24 @@ const productos =[
 
 // Se agrega un producto al listado para probar el método push
 productos.push(new Producto(60, "Pantalones", "Adidas", 8000,"https://assets.adidas.com/images/w_600,f_auto,q_auto/00d0eeedcadb44a1b1c9ae0d0102f02a_9366/Pantalon_Adicolor_Classics_Firebird_Primeblue_Azul_HB9386_21_model.jpg"))
+
+let productosML = [];;
+// await fetch(`https://api.mercadolibre.com/sites/MLA/search?q=sillas`).then((response) => response.json()).then((informacion) => productosML = informacion.results);
+
+async function getData(busqueda){
+    return await fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${busqueda}`).then(response => response.json()).then((data)=>{return data});
+
+}
+
+async function iniciar(){
+    productosNike = await getData("nike");
+    productosAdidas = await getData("adidas");
+    productosTelefono = await getData("telefonos");
+    productosML = productosNike.results.concat(productosAdidas.results, productosTelefono.results);
+    mostrarProductos(productosML);
+    renderCarro(carrito);
+    calcularTotal(carrito);
+}
 
 
 // Se inician variables
@@ -58,8 +76,9 @@ function guardarLocal(clave, valor){
 function renderCarro(carro){
     divCarro.innerHTML = "";
     carro.forEach((productoCarro) => {
-        let item = productos.find((producto)=> producto.id == productoCarro.id)
-        const {id ,nombre, marca, precio, img} = item;
+        let item =  productosML.find((producto)=> producto.id == productoCarro.id)
+        const {id ,title, price} = item;
+        let img = item.thumbnail;
         divCarro.innerHTML += 
         `<div class="cart-item row" id="producto-${id}">
             <div class="col-3 img-cart-wrapper">
@@ -68,20 +87,20 @@ function renderCarro(carro){
             <div class="col-9">
                 <div class="w-100 card-item-data">
                     <div class="d-flex flex-row justify-content-between">
-                        <h5>${nombre} ${marca} </h5>
+                        <h5>${title} </h5>
                         <div class="cart-icon-delete text-right">
-                            <button onclick="borrarDelCarro(${id})" id="del-cart-${id}" type="button" class="btn btn-delete">
+                            <button onclick="borrarDelCarro('${id}')" id="del-cart-${id}" type="button" class="btn btn-delete">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
                     </div>
                     <div class="input-wrapper d-flex justify-content-between align-items-center">
                         <div id ="buttons">
-                            <i class="fa-solid fa-minus" onclick=decrementar(${id})></i>  
+                            <i class="fa-solid fa-minus" onclick=decrementar('${id}')></i>  
                             <div id="${id}" class="quantity"> ${productoCarro.cantidad} </div>
-                            <i class="fa-solid fa-plus"onclick=incrementar(${id})></i>
+                            <i class="fa-solid fa-plus"onclick=incrementar('${id}')></i>
                         </div>
-                        <h6 class="precio d-inline">$ ${precio}</h6>
+                        <h6 class="precio d-inline">$ ${price}</h6>
                     </div>
                 </div>
             </div>
@@ -90,6 +109,9 @@ function renderCarro(carro){
     
 }
 
+async function getItem(idProducto){
+    return await fetch(`https://api.mercadolibre.com/items/${idProducto}`).then(response => response.json()).then((data)=>{return data});
+}
 
 // Funcion para agregar un producto al carro
 function agregarAlCarro(producto){
@@ -113,9 +135,9 @@ function agregarAlCarro(producto){
 
 
 function alertaCarro(producto){
-    const {nombre, marca} = producto;
+    const {title} = producto;
     Toastify({
-        text: `Agregaste ${nombre} ${marca} al carro`,
+        text: `Agregaste ${title} al carro`,
         duration: 1500,
         close: false,
         gravity: "top", 
@@ -173,8 +195,8 @@ function calcularTotal(listadoCarro){
     // Se reinicia la variable
     total = 0
     listadoCarro.forEach((productoCarro) =>{
-        let item  = productos.find((p)=> p.id == productoCarro.id)
-        total += productoCarro.cantidad * item.precio ;
+        let item  = productosML.find((p)=> p.id == productoCarro.id)
+        total += productoCarro.cantidad * item.price ;
         
     })
     // total = listadoCarro.length > 0 ? listadoCarro.reduce((acc, el) => acc + Number(el.precio),0) : 0;
@@ -209,14 +231,15 @@ function addEventos(listados){
 function mostrarProductos(listado){
     divListado.innerHTML = "";
     listado.forEach((producto)=>{
-        const {id ,nombre, marca, precio, img} = producto;
-        divListado.innerHTML +=
-        `<div class="col"> 
-            <div class="card">
-                <img src="${img}" alt="imagen producto" class="card-img-top card-image">
-                <div class='card-body'>
-                    <h5 class='card-title'> ${nombre} ${marca}</h5>
-                    <h6 class='card-subtitle mb-2 text-muted'>$ ${precio}</h6>
+        const {id ,title, price} = producto;
+        let imgs = getImg(producto.thumbnail);
+        divListado.innerHTML += 
+        `<div class="col-md-4 col-lg-3"> 
+            <div class="card h-100">
+                <img src="${imgs}" alt="imagen producto" class="card-img-top">
+                <div class='card-body d-flex flex-column justify-content-between'>
+                    <h5 class='card-title'> ${title}</h5>
+                    <h6 class='card-subtitle mb-2 text-muted'>$ ${price}</h6>
                     <div class="card-content d-flex justify-content-center align-items-center">
                         <button id='add-cart-${id}' class="btn btn-primary">Agregar al carro</button>
                     </div>
@@ -227,15 +250,23 @@ function mostrarProductos(listado){
     addEventos(listado);
 }
 
+function getImg(img){
+    return img.replace("I","O");
+}
+
+
 function filtrarProductos(event) {
     let filter = document.getElementById("searchBar").value.toUpperCase();
     if(filter === ""){
-        mostrarProductos(productos);
+        mostrarProductos(productosML);
     }
     else{
-        productosFiltrados = productos.filter((el) => el.nombre.toUpperCase() == filter || el.marca.toUpperCase() == filter);
+        productosFiltrados = productosML.filter((el) => el.title.toUpperCase().includes(filter));
         if(productosFiltrados.length == 0){
-            divListado.innerHTML = "<div class='display-5'> No se encontraron productos </div>"
+            Swal.fire({
+                title: `No se encontraron productos`,
+                icon: "error",
+            })
         }
         else
         {
@@ -311,12 +342,6 @@ guardarLocal("listadoProductos", JSON.stringify(productos));
 
 document.getElementById("cart-quantity").innerText = getCantidad(carrito);
 
-renderCarro(carrito);
 
-
-mostrarProductos(productos);
-
-calcularTotal(carrito);
-
-
+iniciar();
 
