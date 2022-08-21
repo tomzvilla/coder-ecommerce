@@ -240,9 +240,7 @@ function mostrarProductos(listado){
                 <div class='card-body d-flex flex-column justify-content-between'>
                     <h5 class='card-title'> ${title}</h5>
                     <h6 class='card-subtitle mb-2 text-muted'>$ ${price}</h6>
-                    <div class="card-content d-flex justify-content-center align-items-center">
-                        <button id='add-cart-${id}' class="btn btn-primary">Agregar al carro</button>
-                    </div>
+                    <button id='add-cart-${id}' class="btn-add align-self-center">Agregar al carro</button>
                 </div>
             </div>
         </div>`;

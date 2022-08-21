@@ -47,23 +47,28 @@
 }
 
 
-.card-content{
-    position: absolute;
-    right: 0;
-    left: 0;
-    bottom: 0px;
-    top: 40%;
-    background-color: #ccc;
-    transform-style: preserve-3d;
-    transform: rotateX(90deg);
-    opacity: 0.9;
+.btn-add{
+    border-style: none;
+    border: 1px solid #3a67aa;
+    background-color:#607EAA ;
+    color: white;
+    width: 75%;
+    margin: 0;
+    padding: 0.75rem;
+    border-radius: 40px;
+    cursor: pointer;
 }
 
-.card:hover .card-content{
-    transform: rotateX(0deg);
-    display: block;
-    transition: 50ms ease-in-out;
+.btn-add:hover{
+    background-color:#496ea5;
+    border: 1px solid #1454b4
+
 }
+
+.card:hover{
+    transform: scale(105%);
+} 
+
 .card-img-top {
     width: 100%;
     height: 70vw;
@@ -72,6 +77,9 @@
 @media screen and (min-width:768px){
     .card-img-top {
         height: 30vw;
+    }
+    .btn-add{
+        width: 80%;
     }
 }
 @media screen and (min-width:1024px) {
@@ -115,6 +123,10 @@
     .card-img-top {
         height: 20vw;
     }
+}
+
+.offcanvas-title{
+    font-size: 1.5rem;
 }
 
 .cart-item{
@@ -190,7 +202,7 @@
 
 .btn-custom{
     width: 100%;
-    background-color: #808080;
+    background-color: #607EAA;
     color: #ffffff;
     padding: 1rem;
     border: none;
@@ -199,7 +211,7 @@
 }
 
 .btn-custom:hover{
-    background-color: #727171;
+    background-color: #496ea5;
     color: #ffffff;
 }
 
