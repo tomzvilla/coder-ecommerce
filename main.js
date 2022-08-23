@@ -35,11 +35,19 @@ async function getData(busqueda){
 }
 
 async function iniciar(){
+    document.getElementById("spn").innerHTML = 
+    `<div class="d-flex justify-content-center mt-5">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    `;
     productosNike = await getData("nike");
     productosAdidas = await getData("adidas");
     productosTelefono = await getData("telefonos");
     productosML = productosNike.results.concat(productosAdidas.results, productosTelefono.results);
     mostrarProductos(productosML);
+    document.getElementById("spn").innerHTML = "";
     renderCarro(carrito);
     calcularTotal(carrito);
 }
@@ -235,12 +243,22 @@ function mostrarProductos(listado){
         let imgs = getImg(producto.thumbnail);
         divListado.innerHTML += 
         `<div class="col-md-4 col-lg-3"> 
-            <div class="card h-100">
-                <img src="${imgs}" alt="imagen producto" class="card-img-top">
-                <div class='card-body d-flex flex-column justify-content-between'>
-                    <h5 class='card-title'> ${title}</h5>
-                    <h6 class='card-subtitle mb-2 text-muted'>$ ${price}</h6>
-                    <button id='add-cart-${id}' class="btn-add align-self-center">Agregar al carro</button>
+            <div class="card-wrapper">
+                <div class="card-front">
+                    <div class="card h-100">
+                        <img src="${imgs}" alt="imagen producto" class="card-img-top">
+                        <div class='card-body d-flex flex-column justify-content-between'>
+                            <h5 class='card-title'> ${title}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <div class="card h-100">
+                        <div class='card-body d-flex flex-column justify-content-center'>
+                            <h6 class='card-subtitle text-center'>$${price}</h6>
+                            <button id='add-cart-${id}' class="btn-add align-self-center"><i class="fa-solid fa-cart-shopping fa-2x"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>`;
@@ -293,6 +311,7 @@ function realizarCompra(event){
             });
             // Se vacia el carro luego de la compra
             carrito = [];
+            document.getElementById("cart-quantity").innerText = getCantidad(carrito);
             guardarLocal("carritoLS", JSON.stringify(carrito));
             calcularTotal(carrito);
             renderCarro(carrito);

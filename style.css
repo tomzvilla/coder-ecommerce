@@ -25,6 +25,7 @@
     cursor: pointer;
 }
 
+
 .cart-icon{
     color: white;
 }
@@ -52,7 +53,7 @@
     border: 1px solid #3a67aa;
     background-color:#607EAA ;
     color: white;
-    width: 75%;
+    width: 60%;
     margin: 0;
     padding: 0.75rem;
     border-radius: 40px;
@@ -65,9 +66,55 @@
 
 }
 
+.card-subtitle{
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-wrapper{
+    transform: perspective(1000px);
+    transition: 1s;
+    transform-style: preserve-3d;
+    position: relative;
+    height: 100%;
+}
+
+.card-front{
+    position: relative;
+    height: 100%;
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+
+.card-back{
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotateY(-180deg);
+    height: 100%;
+    width: 100%;
+}
+
+.card-front, .card-back{
+    backface-visibility: hidden;
+    transition: 1s;
+    transform-style: preserve-3d;
+}
+
+.card-wrapper:hover .card-back{
+    transform: rotateY(0deg);
+}
+
+.card-wrapper:hover .card-front{
+    transform: rotateY(180deg);
+}
+
 .card:hover{
-    transform: scale(105%);
+    transform: scale(102%);
+    transition: all ease-in 150ms;
+    box-shadow: 3px 3px 8px 3px rgba(0,0,0,0.2);
 } 
+
 
 .card-img-top {
     width: 100%;
